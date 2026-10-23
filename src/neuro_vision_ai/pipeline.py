@@ -62,8 +62,12 @@ def pipeline(models,best_model_path='artifacts/checkpoints',backup_dir='artifact
             for metric,values in history.history.items():
                 for epoch, value in enumerate(values):
                     mlflow.log_metric(metric, float(value), step=epoch+1)
-                    plot(metric, "test "+metric)
-                    mlflow.log_artifact("test "+metric)
+                fig, ax = plt.figure(figsize=(8, 6))
+                ax.plot(metric, "test "+metric,ax=ax)
+                ax.set_xlabel("Epoch")
+                ax.set_ylabel(metric)
+                ax.set_title(metric)
+                mlflow.log_figure(fig, "test_"+name+'_'+metric)
             
             test_metrics = model.evaluate(test_ds,return_dict=True)
             for metric, value in test_metrics.items():
@@ -75,7 +79,7 @@ def pipeline(models,best_model_path='artifacts/checkpoints',backup_dir='artifact
             y_pred = np.argmax(y_pred_proba,axis=1)
 
             cm = confusion_matrix(y_test_encoded, y_pred, labels=np.arange(num_classes))
-            fig, ax = plt.figure(figsize=(8, 6))
+            fig, ax = plt.subplots(figsize=(8, 6))
             convention_matrix = sns.heatmap(
                 cm,
                 annot=True,
