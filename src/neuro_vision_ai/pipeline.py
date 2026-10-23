@@ -62,7 +62,7 @@ def pipeline(models,best_model_path='artifacts/checkpoints',backup_dir='artifact
             for metric,values in history.history.items():
                 for epoch, value in enumerate(values):
                     mlflow.log_metric(metric, float(value), step=epoch+1)
-                fig, ax = plt.figure(figsize=(8, 6))
+                fig, ax = plt.subplots(figsize=(8, 6))
                 ax.plot(metric, "test "+metric,ax=ax)
                 ax.set_xlabel("Epoch")
                 ax.set_ylabel(metric)
