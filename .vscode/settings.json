@@ -1,0 +1,4 @@
+{
+    "jupyter.allowUnauthorizedRemoteConnection": true,
+    "files.autoSave": "onFocusChange"
+}
