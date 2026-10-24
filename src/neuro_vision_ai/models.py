@@ -70,7 +70,7 @@ def mobile_net_v2_finetuning_model(model,base_model,unfreeze_last=30):
 
     return model
 
-def callabacks(best_model_path,backup_dir,monitor='val_loss',patience=3,restore_best_weights=True):
+def callbacks(best_model_path,backup_dir,monitor='val_loss',patience=3,restore_best_weights=True):
     best_model_path = Path(best_model_path)
     backup_dir = Path(backup_dir)
     best_model_path.parents.mkdir(parents=True, exist_ok=True)
@@ -80,77 +80,3 @@ def callabacks(best_model_path,backup_dir,monitor='val_loss',patience=3,restore_
         tf.keras.callbacks.ModelCheckpoint(filepath=str(best_model_path),monitor=monitor,save_best_only=True),
         tf.keras.callbacks.BackupAndRestore(backup_dir=str(backup_dir))
     ]
-
-
-
-# def train_experiment(experiment_name):
-#     train_ds, val_ds, test_ds, num_classes, class_weights = (
-#         prepare_datasets()
-#     )
-
-#     if experiment_name == "custom_cnn":
-#         model = build_custom_cnn(num_classes=num_classes)
-#         base_model = None
-
-#     elif experiment_name in ("mobilenet_frozen", "mobilenet_finetuned"):
-#         model, base_model = build_mobilenet_frozen(
-#             num_classes=num_classes
-#         )
-
-#     else:
-#         raise ValueError(f"Unknown experiment: {experiment_name}")
-
-#     output_dir = Path("artifacts") / experiment_name
-#     output_dir.mkdir(parents=True, exist_ok=True)
-
-#     callbacks = [
-#         tf.keras.callbacks.EarlyStopping(
-#             monitor="val_loss",
-#             patience=4,
-#             restore_best_weights=True
-#         ),
-#         tf.keras.callbacks.ModelCheckpoint(
-#             filepath=str(output_dir / "best_model.keras"),
-#             monitor="val_loss",
-#             save_best_only=True
-#         ),
-#         tf.keras.callbacks.ReduceLROnPlateau(
-#             monitor="val_loss",
-#             factor=0.2,
-#             patience=2,
-#             min_lr=1e-7
-#         )
-#     ]
-
-#     # Stage 1: train the custom CNN or the frozen MobileNetV2 head.
-#     model.fit(
-#         train_ds,
-#         validation_data=val_ds,
-#         epochs=EPOCHS,
-#         class_weight=class_weights,
-#         callbacks=callbacks
-#     )
-
-#     # Stage 2: fine-tune selected MobileNetV2 layers.
-#     if experiment_name == "mobilenet_finetuned":
-#         model = prepare_fine_tuning(model, base_model)
-
-#         model.fit(
-#             train_ds,
-#             validation_data=val_ds,
-#             epochs=10,
-#             class_weight=class_weights,
-#             callbacks=callbacks
-#         )
-
-#     test_loss, test_accuracy = model.evaluate(test_ds, verbose=0)
-
-#     print({
-#         "experiment": experiment_name,
-#         "test_loss": test_loss,
-#         "test_accuracy": test_accuracy
-#     })
-
-#     model.save(output_dir / "final_model.keras")
-
-#     return model
