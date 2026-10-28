@@ -27,7 +27,7 @@ def custum_cnn_model(n_class,augmentation,img_size=(224,224)):
     x = tf.keras.layers.Dropout(0.4)(x)
     outputs = tf.keras.layers.Dense(n_class,activation='softmax')(x)
 
-    model = tf.keras.Model(inputs=inputs,outputs,name='custom_cnn')
+    model = tf.keras.Model(inputs=inputs,outputs=outputs,name='custom_cnn')
 
     model.compile(optimizer=tf.keras.optimizers.Adam(learning_rate=1e-3),loss='sparse_categorical_crossentropy',metrics=['accuracy'])
 
@@ -50,7 +50,7 @@ def mobile_net_v2_frozen_model(n_class,augmentation,img_size=(224,224)):
     x = tf.keras.layers.Dropout(0.4)(x)
     outputs = tf.keras.layers.Dense(n_class,activation='softmax')(x)
 
-    model = tf.keras.Model(inputs=inputs,outputs, name='mobilenetv2_frozen')
+    model = tf.keras.Model(inputs=inputs,outputs=outputs, name='mobilenetv2_frozen')
 
     model.compile(optimizer=tf.keras.optimizers.Adam(learning_rate=1e-3),loss='sparse_categorical_crossentropy',metrics=['accuracy'])
 
