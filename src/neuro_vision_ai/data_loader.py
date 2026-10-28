@@ -1,4 +1,5 @@
 from pathlib import Path
+import tensorflow as tf
 import cv2
 import os
 import sklearn
@@ -88,7 +89,7 @@ def train_test_val_split(X,y,train_size=0.5,val_size=0.25):
         raise ValueError('train, validation and test sizes must be positive!')
     X_train,X_tmp,y_train,y_tmp = sklearn.model_selection.train_test_split(X,y,train_size=train_size,random_state=RANDON_SEED,stratify=y)
     relative_test_val_size = test_size / (1 - train_size)
-    X_val,X_test,y_val,y_test = sklearn.model_selection.train_test_split(X_tmp,y_tmp,test_size=relative_test_size,random_state=RANDON_SEED,stratify=y_tmp)
+    X_val,X_test,y_val,y_test = sklearn.model_selection.train_test_split(X_tmp,y_tmp,test_size=relative_test_val_size,random_state=RANDON_SEED,stratify=y_tmp)
     return X_train,y_train,X_val,y_val,X_test,y_test
 
 def label_encoder(y_train_str,y_val_str,y_test_str):
@@ -109,7 +110,7 @@ def make_dataset(X,y,batch_size=BATCH_SIZE,training=False,mobilenetv2=False):
     ds = tf.data.Dataset.from_tensor_slices((X,y))
     if training:
         ds = ds.shuffle(buffer_size=len(X),seed=RANDON_SEED,reshuffle_each_iteration=True)
-    ds = ds.map(lambda image, lable: (input_normalisation(image,mobilenetv2),label),num_parallel_calls=tf.data.AUTOTUNE)
+    ds = ds.map(lambda image, label: (input_normalisation(image,mobilenetv2),label),num_parallel_calls=tf.data.AUTOTUNE)
     ds = ds.batch(batch_size).prefetch(tf.data.AUTOTUNE)
 
     return ds

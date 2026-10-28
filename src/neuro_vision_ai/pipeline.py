@@ -24,7 +24,7 @@ from .models import (
 )
 SEED = 10
 BATCH_SIZE = 32
-EPOCHS = 30
+EPOCHS = 15
 
 tf.keras.utils.set_random_seed(SEED)
 def evaluate_model(name,model,history,classes_name,num_classes,y_test_encoded,test_ds):

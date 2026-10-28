@@ -1,5 +1,5 @@
 import tensorflow as tf
-import Path
+from pathlib import Path
 
 def custum_cnn_model(n_class,augmentation,img_size=(224,224)):
     inputs = tf.keras.Input(shape=(*img_size,3))
@@ -73,7 +73,7 @@ def mobile_net_v2_finetuning_model(model,base_model,unfreeze_last=30):
 def callbacks(best_model_path,backup_dir,monitor='val_loss',patience=3,restore_best_weights=True):
     best_model_path = Path(best_model_path)
     backup_dir = Path(backup_dir)
-    best_model_path.parents.mkdir(parents=True, exist_ok=True)
+    best_model_path.parent.mkdir(parents=True, exist_ok=True)
     backup_dir.mkdir(parents=True, exist_ok=True)
     return [
         tf.keras.callbacks.EarlyStopping(monitor=monitor,patience=patience,restore_best_weights=restore_best_weights),
